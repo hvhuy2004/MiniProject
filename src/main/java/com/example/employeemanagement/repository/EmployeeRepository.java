@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     
-    List<Employee> findByFirstNameContainingOrLastNameContaining(String firstName, String lastName);
+    List<Employee> findByNameContaining(String name);
     
     List<Employee> findByDepartmentId(Long departmentId);
     

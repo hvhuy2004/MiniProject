@@ -32,11 +32,8 @@ public class EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
         
-        employee.setFirstName(employeeDetails.getFirstName());
-        employee.setLastName(employeeDetails.getLastName());
+        employee.setName(employeeDetails.getName());
         employee.setEmail(employeeDetails.getEmail());
-        employee.setPosition(employeeDetails.getPosition());
-        employee.setSalary(employeeDetails.getSalary());
         employee.setDepartment(employeeDetails.getDepartment());
         
         return employeeRepository.save(employee);
@@ -47,7 +44,7 @@ public class EmployeeService {
     }
 
     public List<Employee> searchByName(String name) {
-        return employeeRepository.findByFirstNameContainingOrLastNameContaining(name, name);
+        return employeeRepository.findByNameContaining(name);
     }
 
     public List<Employee> findByDepartment(String departmentName) {

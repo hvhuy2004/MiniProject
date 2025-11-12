@@ -10,11 +10,8 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String firstName;
-    private String lastName;
+    private String name;
     private String email;
-    private String position;
-    private Double salary;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
@@ -23,12 +20,9 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(String firstName, String lastName, String email, String position, Double salary) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Employee(String name, String email) {
+        this.name = name;
         this.email = email;
-        this.position = position;
-        this.salary = salary;
     }
 
     public Long getId() {
@@ -39,20 +33,12 @@ public class Employee {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -61,22 +47,6 @@ public class Employee {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public Double getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Double salary) {
-        this.salary = salary;
     }
 
     public Department getDepartment() {
