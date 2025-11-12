@@ -8,6 +8,5 @@ class EmployeeManagementApplicationTests {
 
     @Test
     void contextLoads() {
-        // Test để verify Spring context load thành công
     }
 }
