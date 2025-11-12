@@ -1,19 +1,29 @@
 package com.example.employeemanagement.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "employees")
 public class Employee {
 
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String firstName;
     private String lastName;
     private String email;
     private String position;
     private Double salary;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
     public Employee() {
     }
 
-    public Employee(String id, String firstName, String lastName, String email, String position, Double salary) {
-        this.id = id;
+    public Employee(String firstName, String lastName, String email, String position, Double salary) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -21,11 +31,11 @@ public class Employee {
         this.salary = salary;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -67,5 +77,13 @@ public class Employee {
 
     public void setSalary(Double salary) {
         this.salary = salary;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }

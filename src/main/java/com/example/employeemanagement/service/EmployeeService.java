@@ -1,69 +1,56 @@
 package com.example.employeemanagement.service;
 
-import com.example.employeemanagement.config.AppConfig;
 import com.example.employeemanagement.model.Employee;
+import com.example.employeemanagement.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class EmployeeService {
 
-    private final UtilityService utilityService;
-    private final AppConfig.PasswordEncoder passwordEncoder;
-    private final List<Employee> employees = new ArrayList<>();
+    private final EmployeeRepository employeeRepository;
 
-    public EmployeeService(UtilityService utilityService, AppConfig.PasswordEncoder passwordEncoder) {
-        this.utilityService = utilityService;
-        this.passwordEncoder = passwordEncoder;
-        initializeData();
-    }
-
-    private void initializeData() {
-        employees.add(new Employee("EMP-001", "John", "Doe", "john.doe@example.com", "Developer", 50000.0));
-        employees.add(new Employee("EMP-002", "Jane", "Smith", "jane.smith@example.com", "Manager", 70000.0));
-        employees.add(new Employee("EMP-003", "Bob", "Johnson", "bob.johnson@example.com", "Designer", 45000.0));
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
     public List<Employee> getAllEmployees() {
-        return new ArrayList<>(employees);
+        return employeeRepository.findAll();
     }
 
-    public Optional<Employee> getEmployeeById(String id) {
-        return employees.stream()
-                .filter(emp -> emp.getId().equals(id))
-                .findFirst();
+    public Optional<Employee> getEmployeeById(Long id) {
+        return employeeRepository.findById(id);
     }
 
     public Employee createEmployee(Employee employee) {
-        String employeeCode = utilityService.generateEmployeeCode();
-        employee.setId(employeeCode);
+        return employeeRepository.save(employee);
+    }
+
+    public Employee updateEmployee(Long id, Employee employeeDetails) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
         
-        String formattedFirstName = utilityService.formatString(employee.getFirstName());
-        String formattedLastName = utilityService.formatString(employee.getLastName());
-        employee.setFirstName(formattedFirstName);
-        employee.setLastName(formattedLastName);
+        employee.setFirstName(employeeDetails.getFirstName());
+        employee.setLastName(employeeDetails.getLastName());
+        employee.setEmail(employeeDetails.getEmail());
+        employee.setPosition(employeeDetails.getPosition());
+        employee.setSalary(employeeDetails.getSalary());
+        employee.setDepartment(employeeDetails.getDepartment());
         
-        employees.add(employee);
-        return employee;
+        return employeeRepository.save(employee);
     }
 
-    public String createEmployee(String firstName, String lastName, String password) {
-        String employeeCode = utilityService.generateEmployeeCode();
-        String fullName = utilityService.formatEmployeeName(firstName, lastName);
-        String encodedPassword = passwordEncoder.encode(password);
-
-        return String.format("Employee Created - Code: %s, Name: %s, Password Hash: %s",
-                employeeCode, fullName, encodedPassword);
+    public void deleteEmployee(Long id) {
+        employeeRepository.deleteById(id);
     }
 
-    public String formatEmployeeName(String firstName, String lastName) {
-        return utilityService.formatEmployeeName(firstName, lastName);
+    public List<Employee> searchByName(String name) {
+        return employeeRepository.findByFirstNameContainingOrLastNameContaining(name, name);
     }
 
-    public String generateNewEmployeeCode() {
-        return utilityService.generateEmployeeCode();
+    public List<Employee> findByDepartment(String departmentName) {
+        return employeeRepository.findByDepartmentName(departmentName);
     }
 }
