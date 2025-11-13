@@ -33,7 +33,6 @@ public class ErrorResponse {
         this.details = details;
     }
 
-    // Getters and Setters
     public LocalDateTime getTimestamp() {
         return timestamp;
     }
